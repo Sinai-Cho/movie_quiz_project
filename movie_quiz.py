@@ -3,7 +3,9 @@
 import json
 import os   
 
-# 문제 형태 클래스
+#=================================================
+# 문제 1개당 형태 클래스 (Class Quiz)
+#=================================================
 class Quiz:
     def __init__(self, question, choices, answer):
         self.question = question
@@ -20,8 +22,9 @@ class Quiz:
     def check_answer(self, user_answer):
         return user_answer == self.answer
 
-
+#=================================================       
 # 기본 퀴즈 10문제
+#=================================================
 def make_default_quizzes():
     quizzes = [
         Quiz(
@@ -68,7 +71,9 @@ def make_default_quizzes():
 
     return quizzes
 
-# 입력한 데이터 저장 및 불러오기
+#=================================================
+# 데이터 저장 및 불러오기 (Class DataManager)
+#=================================================
 class DataManager:
     def __init__(self):
         project_folder = os.path.dirname(os.path.abspath(__file__))
@@ -167,12 +172,50 @@ class DataManager:
 
             return quizzes, best_score
 
+#=================================================
+# 퀴즈 풀기
+#=================================================
+def play_quiz(quizzes):
+    if len(quizzes) == 0:
+        print("등록된 퀴즈가 없습니다.")
+        return 0
+
+    score = 0
+
+    print()
+    print("영화 퀴즈를 시작합니다.")
+
+    for i in range(len(quizzes)):
+        quiz = quizzes[i]
+
+        quiz.show(i + 1)
+
+        user_answer = get_number(
+            "정답 번호를 입력하세요: ",
+            1,
+            4
+        )
+
+        if quiz.check_answer(user_answer):
+            print("정답입니다!")
+            score = score + 1
+
+        else:
+            print("오답입니다.")
+            print("정답은", quiz.answer, "번입니다.")
+
+    print()
+    print("=" * 40)
+    print("퀴즈가 끝났습니다.")
+    print("점수:", score, "/", len(quizzes))
+    print("=" * 40)
+
+    return score
 
 
-
-
+#===================================================
 # 파이선 실행 후 등장하는 첫 화면
-
+#===================================================
 def show_menu():
     print()
     print("=" * 40)
@@ -207,6 +250,9 @@ def get_number(message, minimum, maximum):
         return number
 
 
+
+quizzes = make_default_quizzes()
+
 while True:
     show_menu()
 
@@ -217,7 +263,7 @@ while True:
     )
 
     if menu == 1:
-        print("퀴즈 풀기 기능은 아직 준비 중입니다.")
+        play_quiz(quizzes)
 
     elif menu == 2:
         print("퀴즈 추가 기능은 아직 준비 중입니다.")
