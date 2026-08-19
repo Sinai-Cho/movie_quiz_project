@@ -1,7 +1,7 @@
 # 1.디렉토리 생성
 
 
-![파일 구조](./images/mk folder_file.png)
+![file](./images/mk folder_file.png)
 
 
 # 2. 커밋 기록
@@ -13,16 +13,16 @@
 
 - 퀴즈 1개당 형식 지정
 
-![퀴즈 1개당 형식](./images/commit_03_ mk quiz.png)
+![quizForm](./images/commit_03_ mk quiz.png)
 
 
 - 기본 퀴즈
 
-![기본 저장 퀴즈](./images/commit_04 default quiz.png)
+![baseQuiz](./images/commit_04 default quiz.png)
 
 -json 파일 저장 및 불러오기
 
-![파일 구조](./images/commit_05 add json state.png)
+![json](./images/commit_05 add json state.png)
 
 - mergy
 
@@ -30,14 +30,15 @@
 
 - 퀴즈 추가
 
-![퀴즈 추가 기능](./images/commit_07 add quiz..png)
+![addQuiz](./images/commit_07 add quiz.png)
 
 - 퀴즈 목록
-![퀴즈 목록 만들기](./images/commit_08_quizList..png)
+
+![퀴즈 목록 만들기](./images/commit_08_quizList.png)
 
 - 퀴즈 클래스로 정리
 
-![퀴즈 클래스 생성 및 정리(./images/commit09_class_quizgame.png)
+![퀴즈 클래스 생성 및 정리](./images/commit09_class_quizgame.png)
 
 - 비정상 종료 처리
 
