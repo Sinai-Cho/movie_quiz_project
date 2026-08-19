@@ -19,21 +19,21 @@
 
 ### 2) movie_quiz.py
 - 영화 퀴즈 게임의 전체 Python 코드가 들어 있고 주요 클래스는 아래와 같다.
-#### <Quiz>
+#### **Quiz**
 - 문제 하나를 관리
 - 문제, 선택지, 정답 정보를 저장
 - 문제 출력과 정답 확인 기능을 담당
-#### <DataManager>
+#### **DataManager**
 - state.json 파일 저장과 불러오기 기능 수행
-#### <QuizGame>
+#### **QuizGame**
 - 메뉴와 게임 전체 기능을 관리
 - 퀴즈 풀기, 추가, 목록, 점수 확인 기능 담당
 ### 3) state.json
 - state.json 파일은 프로젝트 루트 폴더에 생성되고, 아래 이미지와 같은 데이터가 저장된다.
-#### <quizzes>
+#### **quizzes**
 - 저장된 퀴즈 목록으로 각 퀴즈는 아래의 정보를 가지고 있다.
 - question: 문제 / choices: 보기 4개  answer: 정답 번호
-#### <best_score>
+#### **best_score**
 - 퀴즈를 끝까지 풀었을 때 기록된 최고 점수 (현재 9개 퀴즈 등록, 9점이 만점)
 
 ![json 구조](./images/json.png)
