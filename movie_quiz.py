@@ -1,5 +1,8 @@
 # 영화 퀴즈 게임
 
+import json
+import os   
+
 # 문제 형태 클래스
 class Quiz:
     def __init__(self, question, choices, answer):
@@ -64,6 +67,105 @@ def make_default_quizzes():
     ]
 
     return quizzes
+
+# 입력한 데이터 저장 및 불러오기
+class DataManager:
+    def __init__(self):
+        project_folder = os.path.dirname(os.path.abspath(__file__))
+        self.file_path = os.path.join(project_folder, "state.json")
+
+    def save_state(self, quizzes, best_score):
+        data = {
+            "quizzes": [],
+            "best_score": best_score
+        }
+
+        for quiz in quizzes:
+            quiz_data = {
+                "question": quiz.question,
+                "choices": quiz.choices,
+                "answer": quiz.answer
+            }
+
+            data["quizzes"].append(quiz_data)
+
+        try:
+            file = open(
+                self.file_path,
+                "w",
+                encoding="utf-8"
+            )
+
+            json.dump(
+                data,
+                file,
+                ensure_ascii=False,
+                indent=4
+            )
+
+            file.close()
+
+            return True
+
+        except OSError:
+            print("파일 저장 중 오류가 발생했습니다.")
+            return False
+
+    def load_state(self):
+        if not os.path.exists(self.file_path):
+            quizzes = make_default_quizzes()
+            best_score = 0
+
+            self.save_state(
+                quizzes,
+                best_score
+            )
+
+            return quizzes, best_score
+
+        try:
+            file = open(
+                self.file_path,
+                "r",
+                encoding="utf-8"
+            )
+
+            data = json.load(file)
+            file.close()
+
+            quizzes = []
+
+            for quiz_data in data["quizzes"]:
+                quiz = Quiz(
+                    quiz_data["question"],
+                    quiz_data["choices"],
+                    quiz_data["answer"]
+                )
+
+                quizzes.append(quiz)
+
+            best_score = data["best_score"]
+
+            return quizzes, best_score
+
+        except (
+            json.JSONDecodeError,
+            KeyError,
+            TypeError,
+            OSError
+        ):
+            print("state.json 파일에 문제가 있습니다.")
+            print("기본 퀴즈 데이터로 복구합니다.")
+
+            quizzes = make_default_quizzes()
+            best_score = 0
+
+            self.save_state(
+                quizzes,
+                best_score
+            )
+
+            return quizzes, best_score
 
 
 
