@@ -1,7 +1,7 @@
 # 1.디렉토리 생성
 
 
-![file](/images/mk folder_file.png). 
+![file](/images/mk folder_file.png)
 
 
 # 2. 커밋 기록
@@ -13,16 +13,21 @@
 
 - 퀴즈 1개당 형식 지정
 
+
 ![quizForm](/images/commit_03_ mk quiz.png) 
 
 
 - 기본 퀴즈
 
+
 ![baseQuiz](/images/commit_04 default quiz.png)
 
--json 파일 저장 및 불러오기
+
+- json 파일 저장 및 불러오기
+
 
 ![json](/images/commit_05 add json state.png)
+
 
 - mergy
 
@@ -30,7 +35,10 @@
 
 - 퀴즈 추가
 
+
 ![addQuiz](/images/commit_07 add quiz.png)
+
+
 
 - 퀴즈 목록
 
@@ -56,6 +64,7 @@
 ![pull](./images/clone_total.png)
 
 ## 3) clone 결과 (before, after)
+
 
 ![before](/images/before clone.png)
 
