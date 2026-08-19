@@ -262,6 +262,28 @@ def add_quiz(quizzes, data_manager, best_score):
 
 
 #=================================================
+# 퀴즈 목록 만들기
+#=================================================
+def show_quiz_list(quizzes):
+    if len(quizzes) == 0:
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    print()
+    print("=" * 40)
+    print("영화 퀴즈 목록")
+    print("=" * 40)
+
+    for i in range(len(quizzes)):
+        quiz = quizzes[i]
+
+        print(str(i + 1) + ".", quiz.question)
+
+    print()
+    print("총 퀴즈 수:", len(quizzes), "개")
+
+
+#=================================================
 # 파이선 실행 후 등장하는 첫 화면
 #=================================================
 def show_menu():
@@ -322,7 +344,7 @@ while True:
     )
 
     elif menu == 3:
-        print("퀴즈 목록 기능은 아직 준비 중입니다.")
+        show_quiz_list(quizzes)
 
     elif menu == 4:
         print("점수 확인 기능은 아직 준비 중입니다.")
