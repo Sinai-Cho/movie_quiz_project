@@ -172,15 +172,13 @@ class DataManager:
 
             return quizzes, best_score
 
-
 #=================================================
-# class QuizGame
+# 실제 게임 play 함수들 class QuizGame
 #=================================================
 class QuizGame:
     def __init__(self):
         self.data_manager = DataManager()
         self.quizzes, self.best_score = self.data_manager.load_state()
-
 
 #=================================================
 # 메뉴 출력
@@ -356,9 +354,37 @@ class QuizGame:
 
         print("=" * 40)
 
-#data_manager = DataManager()
+#=================================================
+# 예외 사항 발생시 저장 기능
+#=================================================
+    def normal_exit(self):
+        print()
 
-#quizzes, best_score = data_manager.load_state()
+        if self.data_manager.save_state(
+            self.quizzes,
+            self.best_score
+        ):
+            print("게임 데이터를 저장했습니다.")
+        else:
+            print("게임 데이터를 저장하지 못했습니다.")
+
+        print("영화 퀴즈 게임을 종료합니다.")
+
+
+    def emergency_exit(self):
+        print()
+        print("입력이 중단되었습니다.")
+        print("현재 데이터를 저장한 후 종료합니다.")
+
+        if self.data_manager.save_state(
+            self.quizzes,
+            self.best_score
+        ):
+            print("데이터가 안전하게 저장되었습니다.")
+        else:
+            print("데이터를 저장하지 못했습니다.")
+
+        print("영화 퀴즈 게임을 종료합니다.")
 
 #=================================================
 # 게임 플레이
@@ -386,14 +412,31 @@ class QuizGame:
                 self.show_best_score()
 
             elif menu == 5:
-                print("프로그램을 종료합니다.")
+                self.normal_exit()
                 break
-
 
 #=================================================
 # 최종 게임 실행
 #=================================================
-game = QuizGame()
-game.run()
+game = None
+
+try:
+    game = QuizGame()
+    game.run()
+
+except KeyboardInterrupt:
+    if game is not None:
+        game.emergency_exit()
+    else:
+        print()
+        print("프로그램 실행이 중단되었습니다.")
+
+except EOFError:
+    if game is not None:
+        game.emergency_exit()
+    else:
+        print()
+        print("입력을 받을 수 없어 프로그램을 종료합니다.")
+
 
 
