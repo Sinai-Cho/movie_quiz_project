@@ -58,3 +58,7 @@
 
 
 <img src="images/after clone.png" width="600">
+
+# 4. 커밋 그래프 이미지
+
+<img src="images/oneline-graph.png" width="600">
