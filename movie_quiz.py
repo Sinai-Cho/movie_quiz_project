@@ -1,9 +1,28 @@
 # 영화 퀴즈 게임
 
+# 문제 생성 
+class Quiz:
+    def __init__(self, question, choices, answer):
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+
+    def show(self, quiz_number):
+        print()
+        print("[문제", quiz_number, "]", self.question)
+
+        for i in range(4):
+            print(str(i + 1) + ".", self.choices[i])
+
+    def check_answer(self, user_answer):
+        return user_answer == self.answer
+
+
+
+
+
+
 # 파이선 실행 후 등장하는 첫 화면
-
-# 영화 퀴즈 게임
-
 
 def show_menu():
     print()
