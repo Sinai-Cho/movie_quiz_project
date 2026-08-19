@@ -14,7 +14,7 @@
 
 ## 4. 파일 구조와 파일 별 설명
 ### 1) 파일 구조
-![파일 구조](images/file.png)
+![파일 구조](./images/file.png)
 
 ### 2) movie_quiz.py
 - 영화 퀴즈 게임의 전체 Python 코드가 들어 있고 주요 클래스는 아래와 같다.
@@ -34,11 +34,11 @@
 - question: 문제 / choices: 보기 4개  answer: 정답 번호
 #### <best_score>
 - 퀴즈를 끝까지 풀었을 때 기록된 최고 점수 (현재 9개 퀴즈 등록, 9점이 만점)
-![json 구조](images/json.png)
+![json 구조](./images/json.png)
 
 ## 6. 퀴즈 프로그램 메뉴 및 함수별 기능
 ### 1) 메뉴
-![메뉴 리스트](images/menu.png)
+![메뉴 리스트](./images/menu.png)
 
 ### 2) 함수별 기능
 - json 파일 저장 : def save_state
