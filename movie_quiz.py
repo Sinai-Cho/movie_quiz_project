@@ -212,10 +212,58 @@ def play_quiz(quizzes):
 
     return score
 
+#=================================================
+# 퀴즈 추가
+#=================================================
+def get_text(message):
+    while True:
+        text = input(message).strip()
 
-#===================================================
+        if text == "":
+            print("내용을 한 글자 이상 입력하세요.")
+            continue
+
+        return text
+
+
+def add_quiz(quizzes, data_manager, best_score):
+    print()
+    print("새로운 영화 퀴즈를 추가합니다.")
+
+    question = get_text("문제를 입력하세요: ")
+
+    choices = []
+
+    for i in range(4):
+        choice = get_text(
+            str(i + 1) + "번 보기를 입력하세요: "
+        )
+
+        choices.append(choice)
+
+    answer = get_number(
+        "정답 번호를 입력하세요(1~4): ",
+        1,
+        4
+    )
+
+    new_quiz = Quiz(
+        question,
+        choices,
+        answer
+    )
+
+    quizzes.append(new_quiz)
+
+    if data_manager.save_state(quizzes, best_score):
+        print("새로운 퀴즈가 저장되었습니다.")
+    else:
+        print("퀴즈는 추가되었지만 파일 저장에 실패했습니다.")
+
+
+#=================================================
 # 파이선 실행 후 등장하는 첫 화면
-#===================================================
+#=================================================
 def show_menu():
     print()
     print("=" * 40)
@@ -250,8 +298,9 @@ def get_number(message, minimum, maximum):
         return number
 
 
+data_manager = DataManager()
 
-quizzes = make_default_quizzes()
+quizzes, best_score = data_manager.load_state()
 
 while True:
     show_menu()
@@ -266,7 +315,11 @@ while True:
         play_quiz(quizzes)
 
     elif menu == 2:
-        print("퀴즈 추가 기능은 아직 준비 중입니다.")
+        add_quiz(
+            quizzes,
+            data_manager,
+            best_score
+    )
 
     elif menu == 3:
         print("퀴즈 목록 기능은 아직 준비 중입니다.")
