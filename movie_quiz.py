@@ -23,7 +23,7 @@ class Quiz:
         return user_answer == self.answer
 
 #=================================================       
-# 기본 퀴즈 10문제
+# 기본 퀴즈 문제
 #=================================================
 def make_default_quizzes():
     quizzes = [
@@ -172,183 +172,228 @@ class DataManager:
 
             return quizzes, best_score
 
+
+#=================================================
+# class QuizGame
+#=================================================
+class QuizGame:
+    def __init__(self):
+        self.data_manager = DataManager()
+        self.quizzes, self.best_score = self.data_manager.load_state()
+
+
+#=================================================
+# 메뉴 출력
+#=================================================
+    def show_menu(self):
+        print()
+        print("=" * 40)
+        print("영화 퀴즈 게임")
+        print("=" * 40)
+        print("1. 퀴즈 풀기")
+        print("2. 퀴즈 추가")
+        print("3. 퀴즈 목록")
+        print("4. 퀴즈 점수 확인")
+        print("5. 프로그램 종료")
+        print("=" * 40)
+
+#=================================================
+# 숫자 입력 및 잘못된 입력 검사
+#=================================================
+    def get_number(self, message, minimum, maximum):
+        while True:
+            user_input = input(message).strip()
+
+            if user_input == "":
+                print("아무것도 입력하지 않았습니다. 다시 입력하세요.")
+                continue
+
+            try:
+                number = int(user_input)
+            except ValueError:
+                print("숫자로 입력하세요.")
+                continue
+
+            if number < minimum or number > maximum:
+                print(minimum, "부터", maximum, "사이의 숫자를 입력하세요.")
+                continue
+
+            return number
+
+#=================================================
+# 문제, 보기 등 입력
+#=================================================
+    def get_text(self, message):
+        while True:
+            text = input(message).strip()
+
+            if text == "":
+                print("내용을 한 글자 이상 입력하세요.")
+                continue
+
+            return text
+
 #=================================================
 # 퀴즈 풀기
 #=================================================
-def play_quiz(quizzes):
-    if len(quizzes) == 0:
-        print("등록된 퀴즈가 없습니다.")
-        return 0
+    def play_quiz(self):
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return 0
 
-    score = 0
+        score = 0
 
-    print()
-    print("영화 퀴즈를 시작합니다.")
+        print()
+        print("영화 퀴즈를 시작합니다.")
 
-    for i in range(len(quizzes)):
-        quiz = quizzes[i]
+        for i in range(len(self.quizzes)):
+            quiz = self.quizzes[i]
 
-        quiz.show(i + 1)
+            quiz.show(i + 1)
 
-        user_answer = get_number(
-            "정답 번호를 입력하세요: ",
-            1,
-            4
-        )
+            user_answer = self.get_number(
+                "정답 번호를 입력하세요: ",
+                1,
+                4
+            )
 
-        if quiz.check_answer(user_answer):
-            print("정답입니다!")
-            score = score + 1
+            if quiz.check_answer(user_answer):
+                print("정답입니다!")
+                score = score + 1
 
-        else:
-            print("오답입니다.")
-            print("정답은", quiz.answer, "번입니다.")
+            else:
+                print("오답입니다.")
+                print("정답은", quiz.answer, "번입니다.")
 
-    print()
-    print("=" * 40)
-    print("퀴즈가 끝났습니다.")
-    print("점수:", score, "/", len(quizzes))
-    print("=" * 40)
+        print()
+        print("=" * 40)
+        print("퀴즈가 끝났습니다.")
+        print("점수:", score, "/", len(self.quizzes))
+        print("=" * 40)
 
-    return score
+        if score > self.best_score:
+            self.best_score = score
+            print("최고 점수를 갱신했습니다!")
+
+            self.data_manager.save_state(
+                self.quizzes,
+                self.best_score
+            )
+
+        return score
 
 #=================================================
 # 퀴즈 추가
 #=================================================
-def get_text(message):
-    while True:
-        text = input(message).strip()
+    def add_quiz(self):
+        print()
+        print("새로운 영화 퀴즈를 추가합니다.")
 
-        if text == "":
-            print("내용을 한 글자 이상 입력하세요.")
-            continue
+        question = self.get_text("문제를 입력하세요: ")
 
-        return text
+        choices = []
 
+        for i in range(4):
+            choice = self.get_text(
+                str(i + 1) + "번 보기를 입력하세요: "
+            )
 
-def add_quiz(quizzes, data_manager, best_score):
-    print()
-    print("새로운 영화 퀴즈를 추가합니다.")
+            choices.append(choice)
 
-    question = get_text("문제를 입력하세요: ")
-
-    choices = []
-
-    for i in range(4):
-        choice = get_text(
-            str(i + 1) + "번 보기를 입력하세요: "
+        answer = self.get_number(
+            "정답 번호를 입력하세요(1~4): ",
+            1,
+            4
         )
 
-        choices.append(choice)
+        new_quiz = Quiz(
+            question,
+            choices,
+            answer
+        )
 
-    answer = get_number(
-        "정답 번호를 입력하세요(1~4): ",
-        1,
-        4
-    )
+        self.quizzes.append(new_quiz)
 
-    new_quiz = Quiz(
-        question,
-        choices,
-        answer
-    )
+        if self.data_manager.save_state(self.quizzes, self.best_score):
+            print("새로운 퀴즈가 저장되었습니다.")
+        else:
+            print("퀴즈는 추가되었지만 파일 저장에 실패했습니다.")
 
-    quizzes.append(new_quiz)
+#=================================================
+# 퀴즈 목록 출력
+#=================================================
+    def show_quiz_list(self):
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
 
-    if data_manager.save_state(quizzes, best_score):
-        print("새로운 퀴즈가 저장되었습니다.")
-    else:
-        print("퀴즈는 추가되었지만 파일 저장에 실패했습니다.")
+        print()
+        print("=" * 40)
+        print("영화 퀴즈 목록")
+        print("=" * 40)
+
+        for i in range(len(self.quizzes)):
+            quiz = self.quizzes[i]
+
+            print(str(i + 1) + ".", quiz.question)
+
+        print()
+        print("총 퀴즈 수:", len(self.quizzes), "개")
+
+#=================================================
+# 최고 점수 확인
+#=================================================
+    def show_best_score(self):
+        print()
+        print("=" * 40)
+        print("최고 점수")
+        print("=" * 40)
+
+        if self.best_score == 0:
+            print("아직 퀴즈를 풀지 않았습니다.")
+        else:
+            print("최고 점수:", self.best_score, "점")
+
+        print("=" * 40)
+
+#data_manager = DataManager()
+
+#quizzes, best_score = data_manager.load_state()
+
+#=================================================
+# 게임 플레이
+#=================================================
+    def run(self):
+        while True:
+            self.show_menu()
+
+            menu = self.get_number(
+                "메뉴 번호를 입력하세요: ",
+                1,
+                5
+            )
+
+            if menu == 1:
+                self.play_quiz()
+
+            elif menu == 2:
+                self.add_quiz()
+
+            elif menu == 3:
+                self.show_quiz_list()
+
+            elif menu == 4:
+                self.show_best_score()
+
+            elif menu == 5:
+                print("프로그램을 종료합니다.")
+                break
 
 
 #=================================================
-# 퀴즈 목록 만들기
+# 최종 게임 실행
 #=================================================
-def show_quiz_list(quizzes):
-    if len(quizzes) == 0:
-        print("등록된 퀴즈가 없습니다.")
-        return
-
-    print()
-    print("=" * 40)
-    print("영화 퀴즈 목록")
-    print("=" * 40)
-
-    for i in range(len(quizzes)):
-        quiz = quizzes[i]
-
-        print(str(i + 1) + ".", quiz.question)
-
-    print()
-    print("총 퀴즈 수:", len(quizzes), "개")
+game = QuizGame()
+game.run()
 
 
-#=================================================
-# 파이선 실행 후 등장하는 첫 화면
-#=================================================
-def show_menu():
-    print()
-    print("=" * 40)
-    print("영화 퀴즈 게임")
-    print("=" * 40)
-    print("1. 퀴즈 풀기")
-    print("2. 퀴즈 추가")
-    print("3. 퀴즈 목록")
-    print("4. 퀴즈 점수 확인")
-    print("5. 프로그램 종료")
-    print("=" * 40)
-
-
-def get_number(message, minimum, maximum):
-    while True:
-        user_input = input(message).strip()
-
-        if user_input == "":
-            print("아무것도 입력하지 않았습니다. 다시 입력하세요.")
-            continue
-
-        try:
-            number = int(user_input)
-        except ValueError:
-            print("숫자로 입력하세요.")
-            continue
-
-        if number < minimum or number > maximum:
-            print(minimum, "부터", maximum, "사이의 숫자를 입력하세요.")
-            continue
-
-        return number
-
-
-data_manager = DataManager()
-
-quizzes, best_score = data_manager.load_state()
-
-while True:
-    show_menu()
-
-    menu = get_number(
-        "메뉴 번호를 입력하세요: ",
-        1,
-        5
-    )
-
-    if menu == 1:
-        play_quiz(quizzes)
-
-    elif menu == 2:
-        add_quiz(
-            quizzes,
-            data_manager,
-            best_score
-    )
-
-    elif menu == 3:
-        show_quiz_list(quizzes)
-
-    elif menu == 4:
-        print("점수 확인 기능은 아직 준비 중입니다.")
-
-    elif menu == 5:
-        print("프로그램을 종료합니다.")
-        break
